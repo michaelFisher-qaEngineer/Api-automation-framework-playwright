@@ -1,127 +1,194 @@
-# Playwright API Automation Framework (JavaScript)
+# Playwright API Automation Framework
 
-A lightweight **API test automation framework** built on **Playwright Test** using the `request` fixture to validate REST-like HTTP flows (GET/POST), plus a small utilities layer and data-driven test inputs.
+A lightweight **API test automation framework** built using **Playwright Test** and the Playwright **APIRequestContext**.  
+This project demonstrates how to automate **REST API workflows** using Playwright without launching a browser.
 
-This repo currently targets the **CloudBerry Store** demo site endpoints (e.g., login, cart, checkout). :contentReference[oaicite:0]{index=0}
+The framework includes examples for common e-commerce workflows such as:
 
----
+- Login authentication
+- Adding items to cart
+- Wishlist operations
+- Completing a purchase
 
-## Why this repo exists
-
-This project is a **portfolio/demo framework** showing how to:
-- Use **Playwright Test for API automation** (no browser required)
-- Drive tests with **external JSON test data**
-- Validate real workflows (login → add to cart → checkout) with clean, repeatable test code
-- Produce **Playwright HTML reports**, screenshots/videos/traces on failure
+It also demonstrates **data-driven testing**, **test utilities**, and **structured Playwright test reporting**.
 
 ---
 
-## Tech stack
+# Why this project exists
 
-- **Node.js + JavaScript (CommonJS)**
-- **@playwright/test** runner + `request` fixture :contentReference[oaicite:1]{index=1}
-- **Playwright HTML reporter** :contentReference[oaicite:2]{index=2}
+This repository was built as a **portfolio project** to demonstrate modern API test automation practices using Playwright.
+
+The goals of the project are to showcase:
+
+- Playwright used for **API automation (not only UI testing)**
+- Clean test organization and reusable utilities
+- Data-driven testing using JSON files
+- Real-world workflow validation
+- A maintainable test structure suitable for scaling
 
 ---
 
-## Project structure
+# Tech Stack
 
-```text
-Api-automation-framework-playwright/
-├─ tests/
-│  ├─ test-data/
-│  │  └─ CloydBerryStoreTestData.json
-│  ├─ TC02_Login_API.spec.js
-│  ├─ TC03_AddToCart_API.spec.js
-│  ├─ TC03_AddToCart_Hybrid.spec.js
-│  ├─ TC04_CompletePurchase_API.spec.js
-│  ├─ TC05_AddToWishList_API.spec.js
-│  └─ TC06_AddAffiliat_API.spec.js
-├─ utils/
-│  └─ Utils.js
-├─ playwright.config.js
-├─ package.json
-└─ package-lock.json
-```
+- **JavaScript (Node.js)**
+- **Playwright Test**
+- **Playwright APIRequestContext**
+- **JSON-based test data**
+- **Playwright HTML reports**
 
-(Your tests folder already includes both pure API flows and a “hybrid” example.)
+---
 
-Quick start
-1) Install
+# Project Structure
+
+
+Api-automation-framework-playwright
+│
+├── tests
+│ ├── test-data
+│ │ └── CloudBerryStoreTestData.json
+│ │
+│ ├── TC02_Login_API.spec.js
+│ ├── TC03_AddToCart_API.spec.js
+│ ├── TC03_AddToCart_Hybrid.spec.js
+│ ├── TC04_CompletePurchase_API.spec.js
+│ ├── TC05_AddToWishList_API.spec.js
+│ └── TC06_AddAffiliate_API.spec.js
+│
+├── utils
+│ └── Utils.js
+│
+├── playwright.config.js
+├── package.json
+└── package-lock.json
+
+
+---
+
+# Quick Start
+
+## 1. Install dependencies
+
+
 npm install
 
-Dependencies are defined in package.json.
 
-2) Run all tests
+---
+
+## 2. Run all tests
+
+
 npx playwright test
-3) Run a single test file
+
+
+---
+
+## 3. Run a single test file
+
+
 npx playwright test tests/TC02_Login_API.spec.js
-4) View the HTML report
+
+
+---
+
+## 4. Open the Playwright report
+
+
 npx playwright show-report
-Configuration
 
-Playwright is configured to:
 
-use ./tests as the test directory
+---
 
-use the HTML reporter
+# Test Coverage
 
-capture screenshots/videos/traces on failure
+## Login API Test
 
-run against Chromium (headful in the current config)
+Validates authentication workflow by:
 
-set a 5s test + expect timeout
+- Requesting the login page
+- Extracting the login token
+- Submitting login credentials via POST request
+- Validating successful authentication response
 
-Note: playwright.config.js currently contains both an export default defineConfig(...) section and a module.exports = config export. If you run into config/module errors, simplify it to either pure CommonJS or pure ESM.
+---
 
-What the tests cover (high level)
-Login token extraction + login POST
+## Add to Cart API Test
 
-The login test demonstrates:
+Demonstrates:
 
-GET the login page
+- Posting cart requests using form parameters
+- Generating dynamic delivery date values
+- Validating cart contents
 
-parse a login_token from HTML
+---
 
-POST credentials using Playwright request.post with form data + headers
+## Hybrid Test Example
 
-Add to cart (API)
+The hybrid example demonstrates how Playwright can combine:
 
-The add-to-cart test demonstrates:
+- API requests
+- UI interaction
 
-generate a delivery date string via Utils
+This approach can accelerate test setup or state preparation.
 
-POST add-to-cart with form fields
+---
 
-GET the cart page and validate content
+## Complete Purchase API Test
 
-Complete purchase (API)
+Validates an end-to-end purchase workflow including:
 
-The checkout flow test validates an end-to-end purchase and confirms the success message (“Your order has been placed!”).
+- Authentication
+- Adding product to cart
+- Checkout completion
+- Purchase confirmation validation
 
-Test data (important)
+---
 
-Tests load credentials from:
-tests/test-data/CloydBerryStoreTestData.json
+# Test Data
 
-Security note: that file currently contains real-looking usernames/passwords in plain text. For a public repo, it’s strongly recommended to:
+Test data is stored in:
 
-remove real credentials immediately
 
-switch to environment variables (or GitHub Actions secrets)
+tests/test-data/CloudBerryStoreTestData.json
 
-add a test-data.sample.json and ignore the real one via .gitignore
 
-Extending the framework
+This allows credentials and request parameters to be separated from test logic.
 
-Common next steps if you want to evolve this into a more “production-style” API framework:
+---
 
-Add npm run test / npm run test:headed / npm run report scripts in package.json
+# Reporting
 
-Centralize base URLs + headers (config/env-driven)
+Playwright generates an **HTML report** after execution.
 
-Add an API client layer (helpers per feature area)
+To view the report:
 
-Add schema validation (optional) and richer assertions
 
-Add CI (GitHub Actions) to run on PRs and publish the HTML report artifact
+npx playwright show-report
+
+
+The report provides:
+
+- Test execution summary
+- Pass/fail status
+- Error stack traces
+- Trace artifacts when enabled
+
+---
+
+# Possible Future Improvements
+
+Some improvements that could evolve this framework further:
+
+- Environment configuration (dev / stage / prod)
+- API client abstraction layer
+- Schema validation for responses
+- CI/CD integration (GitHub Actions)
+- Test tagging and filtering
+- Environment variable management for credentials
+
+---
+
+# Author
+
+Michael Fisher  
+Senior QA Engineer / SDET  
+Seattle, WA
