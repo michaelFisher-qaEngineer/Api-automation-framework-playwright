@@ -40,7 +40,7 @@ The goals of the project are to showcase:
 
 # Project Structure
 
-
+```
 Api-automation-framework-playwright
 │
 ├── tests
@@ -60,7 +60,7 @@ Api-automation-framework-playwright
 ├── playwright.config.js
 ├── package.json
 └── package-lock.json
-
+```
 
 ---
 
